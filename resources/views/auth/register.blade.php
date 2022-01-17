@@ -1,5 +1,10 @@
 <x-auth-layout>
     <div class="col-lg-4 mx-auto">
+        @if (Session::has('message'))
+            <div class="alert alert-danger" role="alert">
+                {{ Session::get('message') }}
+            </div>
+        @endif
         <div class="auth-form-light text-left py-5 px-4 px-sm-5">
             <div class="brand-logo">
                 <img src="{{ asset('assets/images/logo.svg') }}" alt="logo">
