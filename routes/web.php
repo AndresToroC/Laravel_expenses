@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Administrador
+use App\Http\Controllers\Admin\UserController;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -17,3 +20,7 @@ Route::get('/logout', function() {
 
     return view('auth.login');
 })->name('logout');
+
+Route::name('admin.')->prefix('admin')->group(function() {
+    Route::resource('users', UserController::class);
+});
