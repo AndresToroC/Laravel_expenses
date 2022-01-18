@@ -24,7 +24,7 @@
                     <div class="card-title">
                         <b>Editar usuario</b>
                     </div>
-                    <form action="{{ route('admin.users.update', $user->id) }}" method="post">
+                    <form action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -45,14 +45,24 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <x-form.select name="role" :options="$roles" value="{{ $user->roles[0]->id }}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Cargar Imagen de perfil</label>
-                                    <input type="file" class="form-control-file">
+                                    <input type="file" name="photo" class="form-control-file">
                                     <small class="text-gray">Opcional</small>
+                                    @error('photo')
+                                        <div class="mt-1">
+                                            <small class="text-danger">{{ $message }}</small>
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                        <button type="submit" class="btn btn-success btn-sm">Actualizar</button>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-dark btn-sm">Regresar</a>
                     </form>
                 </div>

@@ -24,7 +24,7 @@
                     <div class="card-title">
                         <b>Crear usuario</b>
                     </div>
-                    <form action="{{ route('admin.users.store') }}" method="post">
+                    <form action="{{ route('admin.users.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -44,10 +44,20 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <x-form.select name="role" placeholder="Seleccione un rol" :options="$roles" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Cargar Imagen de perfil</label>
-                                    <input type="file" class="form-control-file">
+                                    <input type="file" name="photo" class="form-control-file">
                                     <small class="text-gray">Opcional</small>
+                                    @error('photo')
+                                        <div class="mt-1">
+                                            <small class="text-danger">{{ $message }}</small>
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

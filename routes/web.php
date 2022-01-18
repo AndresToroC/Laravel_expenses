@@ -21,6 +21,6 @@ Route::get('/logout', function() {
     return view('auth.login');
 })->name('logout');
 
-Route::name('admin.')->prefix('admin')->group(function() {
+Route::middleware('auth')->name('admin.')->prefix('admin')->group(function() {
     Route::resource('users', UserController::class);
 });

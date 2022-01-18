@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 use App\Helper\UiAvatar;
@@ -25,26 +27,42 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::select('id AS value', 'name')->get();
+        
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
     {
-        $role = Role::whereName('client')->first();
-
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+            'password' => 'required|confirmed',
+            'role' => 'required',
+        ];
 
-        $avatarUrl = UiAvatar::avatar($request->name);
+        if ($request->photo) {
+            $rules['photo'] = 'required|image|mimes:jpg,png,jpeg|max:2048';
+        }
+        
+        $request->validate($rules);
+
+        if ($request->photo) {
+            $image = $request->photo;
+
+            $avatarUrl = Str::random(40).".".$image->getClientOriginalExtension();
+            $image->storeAs('public/', $avatarUrl);
+        } else {
+            $avatarUrl = UiAvatar::avatar($request->name);
+        }
         
         $request['password'] = Hash::make($request->password);
-        $request['photo'] = $avatarUrl;
+        
+        $user = new User($request->except('photo'));
+        $user->photo = $avatarUrl;
+        $user->save();
 
-        $user = User::create($request->all());
-
+        $role = $request->role;
         $user->assignRole($role);
 
         return redirect()->back()->with('message', 'Usuario creado correctamente');
@@ -57,17 +75,22 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = Role::select('id AS value', 'name')->get();
+        $user->load('roles');
+
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
     {
-        $role = Role::whereName('client')->first();
-
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|email|unique:users,id,'.$user->id
         ];
+
+        if ($request->photo) {
+            $rules['photo'] = 'required|image|mimes:jpg,png,jpeg|max:2048';
+        }
         
         if ($request->password) {
             $rules['password'] = 'required|confirmed';
@@ -80,25 +103,35 @@ class UserController extends Controller
             $request->validate($rules);
         }
 
-        if (!$user->photo) {
-            $avatarUrl = UiAvatar::avatar($request->name);
-            $request['photo'] = $avatarUrl;
+        $avatarUrl = '';
+        if ($request->photo) {
+            $image = $request->photo;
+            
+            $avatarUrl = Str::random(40).".".$image->getClientOriginalExtension();
+            $image->storeAs('public/', $avatarUrl);
+
+            // Eliminar la foto que tenia antes el usuario
+            Storage::delete('public/'.$user->photo);
+        } else {
+            if (!$user->photo) {
+                $avatarUrl = UiAvatar::avatar($request->name);
+            }
         }
 
-        $user->update($request->all());
+        $user->update($request->except('photo'));
+
+        if ($avatarUrl) {
+            $user->update(['photo' => $avatarUrl]);
+        }
 
         $user->roles()->detach();
+
+        $role = $request->role;
         $user->assignRole($role);
 
         return redirect()->back()->with('message', 'Usuario actualizado correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
