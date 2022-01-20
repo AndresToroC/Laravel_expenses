@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->float('salary', 10, 2)->nullable();
             $table->string('photo')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

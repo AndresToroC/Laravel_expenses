@@ -1,22 +1,15 @@
 <x-app-layout>
-    <div class="row">
-        <div class="col-md-12 grid-margin">
-            <div class="row">
-                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                    <h3 class="font-weight-bold">Usuarios</h3>
+    <x-slot name="header">
+        <div class="row">
+            <div class="col-md-12 grid-margin">
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <h3 class="font-weight-bold">Usuarios</h3>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @if (Session::has('message'))
-                <div class="alert alert-success" role="alert">
-                    {{ Session::get('message') }}
-                </div>
-            @endif
-        </div>
-    </div>
+    </x-slot>
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">

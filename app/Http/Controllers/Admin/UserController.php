@@ -18,11 +18,30 @@ class UserController extends Controller
         $this->middleware(['role:admin']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->paginate(10);
+        $searchNameOrEmail = ($request->searchNameOrEmail) ? $request->searchNameOrEmail : '';
+        $searchRole = ($request->searchRole) ? $request->searchRole : '';
+        $searchStatus = ($request->searchStatusUser) ? $request->searchStatusUser : '';
+        
+        $users = User::when($searchStatus, function($q) {
+                $q->onlyTrashed();
+            })->with('roles')
+            ->whereHas('roles', function($q) use ($request) {
+                if ($request->searchRole) {
+                    $q->whereId($request->searchRole);
+                }
+            })->where(function($q) use ($request) {
+                if ($request->searchNameOrEmail) {
+                    $q->where('name', 'LIKE', '%'.$request->searchNameOrEmail.'%')
+                        ->orWhere('email', 'LIKE', '%'.$request->searchNameOrEmail.'%');
+                }
+            })->paginate(10);
 
-        return view('admin.users.index', compact('users'));
+        $roles = Role::select('id AS value', 'name')->get();
+        $searchStatusOptions = collect([['value' => 1, 'name' => 'Eliminados']]);
+
+        return view('admin.users.index', compact('users', 'roles', 'searchNameOrEmail', 'searchRole', 'searchStatus', 'searchStatusOptions'));
     }
 
     public function create()
@@ -132,8 +151,10 @@ class UserController extends Controller
         return redirect()->back()->with('message', 'Usuario actualizado correctamente');
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect()->back()->with('message', 'Usuario eliminado correctamente');
     }
 }

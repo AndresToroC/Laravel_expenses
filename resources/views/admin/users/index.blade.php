@@ -1,24 +1,45 @@
 <x-app-layout>
-    <div class="row">
-        <div class="col-md-12 grid-margin">
-            <div class="row">
-                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                    <h3 class="font-weight-bold">Usuarios</h3>
-                </div>
-                <div class="col-12 col-xl-4">
-                    <div class="justify-content-end d-flex">
-                        <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-sm">Nuevo</a>
+    <x-slot name="header">
+        <div class="row">
+            <div class="col-md-12 grid-margin">
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <h3 class="font-weight-bold">Usuarios</h3>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="justify-content-end d-flex">
+                            <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-sm">Nuevo</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </x-slot>
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
                         <b>Lista de Usuarios</b>
+                    </div>
+                    <div class="card-description">
+                        <form id="formFilterUsers" action="{{ route('admin.users.index') }}" method="get">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <x-form.input type="text" name="searchNameOrEmail" placeholder="Buscar por nombre o correo" value="{{ $searchNameOrEmail }}" />
+                                </div>
+                                <div class="col-md-3">
+                                    <x-form.select name="searchRole" placeholder="Buscar por rol" :options="$roles" value="{{ $searchRole }}" />
+                                </div>
+                                <div class="col-md-3">
+                                    <x-form.select name="searchStatusUser" placeholder="Activos" :options="$searchStatusOptions" value="{{ $searchStatus }}" />
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <button type="submit" class="btn btn-success">Buscar</button>
+                                    <button type="button" class="btn btn-dark" onclick="clearFilter()">Limpiar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -50,9 +71,11 @@
                                             <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm">
                                                 Editar
                                             </a>
-                                            <a href="{{ route('admin.users.destroy', $user->id) }}" class="btn btn-danger btn-sm">
-                                                Eliminar
-                                            </a>
+                                            <a onclick="deleteUser({{ $user->id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="post" id="delete-user-{{ $user->id }}" style="display: none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
@@ -63,11 +86,39 @@
                             </tbody>
                         </table>
                         <div class="mt-2">
-                            {{ $users }}
+                            {{ $users->appends(['searchNameOrEmail' => $searchNameOrEmail, 'searchRole' => $searchRole, 'searchStatusUser' => $searchStatus])->render() }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <x-slot name="scripts">
+        <script>
+            function deleteUser(userId) {
+                Swal.fire({
+                    title: '¿Estas seguro que deseas eliminar este registro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("delete-user-"+userId).submit();
+                    }
+                })
+            }
+
+            function clearFilter() {
+                document.getElementById("searchNameOrEmail").value = "";
+                document.getElementById("searchRole").value = "";
+                document.getElementById("searchStatusUser").value = "";
+
+                document.getElementById("formFilterUsers").submit();
+            }
+        </script>
+    </x-slot>
 </x-app-layout>

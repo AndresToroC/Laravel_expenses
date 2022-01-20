@@ -1,4 +1,7 @@
 <x-app-layout>
+    <x-slot name="header">
+
+    </x-slot>
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">

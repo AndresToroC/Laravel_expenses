@@ -3,11 +3,11 @@
 <div class="form-group">
     <select name="{{ $name }}" id="{{ $id !== '' ? $id : $name }}" class="form-control form-control-sm">
         @if ($placeholder)
-            <option selected>{{ $placeholder }}</option>
+            <option value="" selected>{{ $placeholder }}</option>
         @endif
         @foreach ($options as $option)
-            <option value="{{ $option->value }}" @if ($value == $option->value) selected @endif>
-                {{ $option->name }}
+            <option value="{{ $option['value'] }}" @if ($value == $option['value']) selected @endif>
+                {{ $option['name'] }}
             </option>
         @endforeach
     </select>

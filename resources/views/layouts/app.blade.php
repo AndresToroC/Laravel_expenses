@@ -36,6 +36,18 @@
                 
                 <div class="main-panel">
                     <div class="content-wrapper">
+                        {{ $header }}
+
+                        @if (Session::has('message'))
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-success" role="alert">
+                                        {{ Session::get('message') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{ $slot }}
                     </div>
 
@@ -52,5 +64,11 @@
         <script src="{{ asset('assets/js/template.js') }}"></script>
         <script src="{{ asset('assets/js/settings.js') }}"></script>
         <script src="{{ asset('assets/js/todolist.js') }}"></script>
+
+        <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
+
+        @isset($scripts)
+            {{ $scripts }}
+        @endisset
     </body>
 </html>
