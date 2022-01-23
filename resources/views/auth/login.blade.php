@@ -26,9 +26,23 @@
                     <a href="#" class="auth-link text-black">¿Se te olvidó tu contraseña?</a>
                 </div>
                 <div class="mb-2">
-                    <button type="button" class="btn btn-block btn-facebook auth-form-btn">
-                        <i class="ti-facebook mr-2"></i>Connect using facebook
-                    </button>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="{{ route('socialite.login', 'facebook') }}" class="btn btn-facebook btn-block">
+                                <i class="ti-facebook"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ route('socialite.login', 'google') }}" class="btn btn-google btn-block">
+                                <i class="ti-google"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ route('socialite.login', 'github') }}" class="btn btn-github btn-block">
+                                <i class="ti-github"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                     ¿No tienes una cuenta? <a href="{{ route('register') }}" class="text-primary">Registrate</a>

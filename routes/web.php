@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Administrador
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\SocialiteProfileController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -21,6 +21,11 @@ Route::get('/logout', function() {
     return view('auth.login');
 })->name('logout');
 
+// Rutas de administrador
 Route::middleware('auth')->name('admin.')->prefix('admin')->group(function() {
     Route::resource('users', UserController::class);
 });
+
+// Rutas para autenticacion con Github, google, facebook, etc
+Route::get('auth/{provider}/login', [SocialiteProfileController::class, 'login'])->name('socialite.login');
+Route::get('auth/{provider}/callback', [SocialiteProfileController::class, 'callback'])->name('socialite.callback');

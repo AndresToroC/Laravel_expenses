@@ -23,8 +23,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'provider',
-        'provider_token',
         'salary',
         'photo'
     ];
@@ -49,4 +47,8 @@ class User extends Authenticatable
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function socialiteProfiles() {
+        return $this->hasMany(SocialiteProfile::class);
+    }
 }
