@@ -8,9 +8,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Helper\UiAvatar;
 use App\Models\User;
+
+use App\Exports\SheetExport;
+use App\Exports\UserExport;
 
 class UserController extends Controller
 {
@@ -156,5 +160,40 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->back()->with('message', 'Usuario eliminado correctamente');
+    }
+
+    public function downloadFile() {
+        $users = User::with('roles')->select('id', 'name AS Nombre', 'email AS Correo electronico', 'created_at AS Fecha de creacion', 'deleted_at')
+            ->withTrashed()->get();
+
+        $array = ['rows' => [], 'title' => ''];
+
+        $header = [];
+        $activeUsers = ['rows' => [], 'title' => 'Activos'];
+        $eliminatedUsers = ['rows' => [], 'title' => 'Eliminados'];
+        foreach ($users as $key => $user) {
+            $deleted = $user->deleted_at;
+            $rol = ($user->roles[0]->name == 'admin') ? 'Administrador' : 'Cliente';
+            $user['Rol'] = $rol;
+
+            unset($user['deleted_at']);
+            unset($user['roles']);
+
+            if (count($header) <= 0) {
+                $header = array_keys($user->toArray());  
+            }
+
+            if ($deleted) {
+                $eliminatedUsers['rows'][] = $user->toArray();
+                continue;
+            }
+
+            $activeUsers['rows'][] = $user->toArray();
+        }
+        
+        $eliminatedUsers['header'] = $header; 
+        $activeUsers['header'] = $header; 
+        
+        return Excel::download(new SheetExport([$activeUsers, $eliminatedUsers]), 'Usuarios.xlsx');
     }
 }

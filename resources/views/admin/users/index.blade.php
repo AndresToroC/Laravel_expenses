@@ -8,7 +8,8 @@
                     </div>
                     <div class="col-12 col-xl-4">
                         <div class="justify-content-end d-flex">
-                            <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-sm">Nuevo</a>
+                            <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-sm mr-2">Nuevo</a>
+                            <a href="{{ route('admin.users.download') }}" class="btn btn-warning btn-sm">Excel</a>
                         </div>
                     </div>
                 </div>

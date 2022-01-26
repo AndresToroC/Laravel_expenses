@@ -24,6 +24,7 @@ Route::get('/logout', function() {
 // Rutas de administrador
 Route::middleware('auth')->name('admin.')->prefix('admin')->group(function() {
     Route::resource('users', UserController::class);
+    Route::get('usersDownload', [UserController::class, 'downloadFile'])->name('users.download');
 });
 
 // Rutas para autenticacion con Github, google, facebook, etc
