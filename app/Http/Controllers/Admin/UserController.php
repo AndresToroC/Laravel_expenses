@@ -41,7 +41,7 @@ class UserController extends Controller
                         ->orWhere('email', 'LIKE', '%'.$request->searchNameOrEmail.'%');
                 }
             })->paginate(10);
-
+            
         $roles = Role::select('id AS value', 'name')->get();
         $searchStatusOptions = collect([['value' => 1, 'name' => 'Eliminados']]);
 
@@ -158,10 +158,17 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
+        
         return redirect()->back()->with('message', 'Usuario eliminado correctamente');
     }
 
+    public function restore($userId) {
+        $user = User::withTrashed()->whereId($userId)->restore();
+
+        return redirect()->back()->with('message', 'Usuario activado correctamente');
+    }
+
+    // Reporte de usuarios
     public function downloadFile() {
         $users = User::with('roles')->select('id', 'name AS Nombre', 'email AS Correo electronico', 'created_at AS Fecha de creacion', 'deleted_at')
             ->withTrashed()->get();

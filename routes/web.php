@@ -24,6 +24,7 @@ Route::get('/logout', function() {
 // Rutas de administrador
 Route::middleware('auth')->name('admin.')->prefix('admin')->group(function() {
     Route::resource('users', UserController::class);
+    Route::post('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
     Route::get('usersDownload', [UserController::class, 'downloadFile'])->name('users.download');
 });
 

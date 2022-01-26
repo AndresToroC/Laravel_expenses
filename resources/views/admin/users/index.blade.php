@@ -72,11 +72,18 @@
                                             <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm">
                                                 Editar
                                             </a>
-                                            <a onclick="deleteUser({{ $user->id }})" class="btn btn-danger btn-sm">Eliminar</a>
-                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="post" id="delete-user-{{ $user->id }}" style="display: none">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                            @if ($user->deleted_at)
+                                                <a onclick="restoreUser({{ $user->id }}, '{{ $user->deleted_at }}')" class="btn btn-success btn-sm">Activar</a>
+                                                <form action="{{ route('admin.users.restore', $user->id) }}" method="post" id="restore-user-{{ $user->id }}" style="display: none">
+                                                    @csrf
+                                                </form>
+                                            @else
+                                                <a onclick="deleteUser({{ $user->id }}, '{{ $user->deleted_at }}')" class="btn btn-danger btn-sm">Eliminar</a>
+                                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="post" id="delete-user-{{ $user->id }}" style="display: none">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -109,6 +116,22 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById("delete-user-"+userId).submit();
+                    }
+                })
+            }
+
+            function restoreUser(userId) {
+                Swal.fire({
+                    title: '¿Estas seguro que deseas activar este registro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("restore-user-"+userId).submit();
                     }
                 })
             }
