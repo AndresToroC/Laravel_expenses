@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\SocialiteProfileController;
 
+use App\Http\Controllers\ProfileUserController;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -21,11 +23,16 @@ Route::get('/logout', function() {
     return view('auth.login');
 })->name('logout');
 
-// Rutas de administrador
-Route::middleware('auth')->name('admin.')->prefix('admin')->group(function() {
-    Route::resource('users', UserController::class);
-    Route::post('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
-    Route::get('usersDownload', [UserController::class, 'downloadFile'])->name('users.download');
+Route::middleware('auth')->group(function() {
+    // Rutas de administrador
+    Route::name('admin.')->prefix('admin')->group(function() {
+        Route::resource('users', UserController::class);
+        Route::post('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
+        Route::get('usersDownload', [UserController::class, 'downloadFile'])->name('users.download');
+    });
+
+    // Rutas de perfil de usuario
+    Route::resource('profile', ProfileUserController::class)->except(['index', 'store', 'create', 'edit', 'destroy']);
 });
 
 // Rutas para autenticacion con Github, google, facebook, etc

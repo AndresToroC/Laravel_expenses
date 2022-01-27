@@ -73,9 +73,9 @@
                     <img src="{{ asset('storage/'.Auth::user()->photo) }}" alt="profile"/>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item">
-                        <i class="ti-settings text-primary"></i>
-                        Configuración
+                    <a class="dropdown-item" href="{{ route('profile.show', Auth::user()->id) }}">
+                        <i class="ti-user text-primary"></i>
+                        Perfil
                     </a>
                     <a href="{{ route('logout') }}" class="dropdown-item">
                         <i class="ti-power-off text-primary"></i>
