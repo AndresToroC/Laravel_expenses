@@ -9,8 +9,14 @@
         @role('admin')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.users.index') }}">
-                    <i class="icon-head   menu-icon"></i>
+                    <i class="icon-head menu-icon"></i>
                     <span class="menu-title">Usuarios</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                    <i class="icon-layout menu-icon"></i>
+                    <span class="menu-title">Categorias</span>
                 </a>
             </li>
         @endrole

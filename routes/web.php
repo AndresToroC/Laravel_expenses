@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\SocialiteProfileController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
 
 use App\Http\Controllers\ProfileUserController;
 
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function() {
         Route::resource('users', UserController::class);
         Route::post('users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
         Route::get('usersDownload', [UserController::class, 'downloadFile'])->name('users.download');
+
+        Route::resource('categories', CategoryController::class);
     });
 
     // Rutas de perfil de usuario
