@@ -1,4 +1,7 @@
 <x-app-layout>
+    <x-slot name="breadcumps">
+        {{ Breadcrumbs::render('users.edit', $user) }}
+    </x-slot>
     <x-slot name="header">
         <div class="row">
             <div class="col-md-12 grid-margin">

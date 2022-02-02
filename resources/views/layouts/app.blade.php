@@ -36,6 +36,14 @@
                 
                 <div class="main-panel">
                     <div class="content-wrapper">
+                        @isset($breadcumps)
+                            <div class="row mb-2">
+                                <div class="col-md-12">
+                                    {{ $breadcumps }}
+                                </div>
+                            </div>
+                        @endisset
+                        
                         {{ $header }}
 
                         @if (Session::has('message'))
