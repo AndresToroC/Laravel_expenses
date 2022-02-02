@@ -4,11 +4,13 @@
             <div class="col-md-12 grid-margin">
                 <div class="row">
                     <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                        <h3 class="font-weight-bold">Categorias</h3>
+                        <h3 class="font-weight-bold"><b>Categoría:</b> {{ $category->name }}</h3>
+                        <small>Sub Categorias</small>
                     </div>
                     <div class="col-12 col-xl-4">
                         <div class="justify-content-end d-flex">
-                            <a href="{{ route('admin.categories.create') }}" class="btn btn-success btn-sm mr-2">Nuevo</a>
+                            <a href="{{ route('admin.categories.subCategories.create', $category->id) }}" class="btn btn-success btn-sm mr-2">Nuevo</a>
+                            <a href="{{ route('admin.categories.index') }}" class="btn btn-dark btn-sm mr-2">Regresar</a>
                         </div>
                     </div>
                 </div>
@@ -20,13 +22,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <b>Lista de Categorias</b>
+                        <b>Lista de Sub Categorias</b>
                     </div>
                     <div class="card-description">
-                        <form id="formFilterCategories" action="{{ route('admin.categories.index') }}" method="get">
+                        <form id="formFilterSubCategories" action="{{ route('admin.categories.subCategories.index', $category->id) }}" method="get">
                             <div class="row">
                                 <div class="col-md-9">
-                                    <x-form.input type="text" name="searchCategory" placeholder="Buscar categoría" value="{{ $searchCategory }}" />
+                                    <x-form.input type="text" name="searchSubCategory" placeholder="Buscar categoría" value="{{ $searchSubCategory }}" />
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <button type="submit" class="btn btn-success">Buscar</button>
@@ -39,23 +41,20 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Categoría</th>
+                                    <th>Sub Categoría</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($categories as $category)
+                                @forelse ($subCategories as $subCategory)
                                     <tr>
-                                        <td>{{ $category->name }}</td>
+                                        <td>{{ $subCategory->name }}</td>
                                         <td class="text-right">
-                                            <a href="{{ route('admin.categories.subCategories.index', $category->id) }}" class="btn btn-warning btn-sm">
-                                                Sub-Categorias
-                                            </a>
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ route('admin.categories.subCategories.edit', [$category->id, $subCategory->id]) }}" class="btn btn-primary btn-sm">
                                                 Editar
                                             </a>
-                                            <a onclick="deleteCategory({{ $category->id }})" class="btn btn-danger btn-sm">Eliminar</a>
-                                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post" id="delete-category-{{ $category->id }}" style="display: none">
+                                            <a onclick="deleteSubCategory({{ $category->id }}, {{ $subCategory->id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                                            <form action="{{ route('admin.categories.subCategories.destroy', [$category->id, $subCategory->id]) }}" method="post" id="delete-sub-category-{{ $category->id }}-{{ $subCategory->id }}" style="display: none">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
@@ -69,7 +68,7 @@
                             </tbody>
                         </table>
                         <div class="mt-2">
-                            {{ $categories->appends(['searchCategory' => $searchCategory])->render() }}
+                            {{ $subCategories->appends(['searchSubCategory' => $searchSubCategory])->render() }}
                         </div>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
 
     <x-slot name="scripts">
         <script>
-            function deleteCategory(categoryId) {
+            function deleteSubCategory(categoryId, subCategoryId) {
                 Swal.fire({
                     title: '¿Estas seguro que deseas eliminar este registro?',
                     icon: 'warning',
@@ -90,15 +89,15 @@
                     cancelButtonText: 'No',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById("delete-category-"+categoryId).submit();
+                        document.getElementById("delete-sub-category-"+categoryId+"-"+subCategoryId).submit();
                     }
                 })
             }
 
             function clearFilter() {
-                document.getElementById('searchCategory').value = "";
+                document.getElementById('searchSubCategory').value = "";
 
-                document.getElementById('formFilterCategories').submit();
+                document.getElementById('formFilterSubCategories').submit();
             }
         </script>
     </x-slot>

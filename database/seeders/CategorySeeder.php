@@ -5,19 +5,37 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 
 class CategorySeeder extends Seeder
 {
     public function run()
     {
         $categories = [
-            ['name' => 'Gastos'],
-            ['name' => 'Ingresos'],
-            ['name' => 'Tarjetas de credito']
+            ['name' => 'Gastos', 
+                'subCategories' => [
+                    'Compromisos Bancarios', 'Salud y bienestar', 'Transporte', 'Hogar', 'Tecnología',
+                    'Entretenimiento', 'Moda', 'Alimentación', 'Educación', 'Viajes', 'Otros'
+                ]
+            ],
+            ['name' => 'Ingresos', 
+                'subCategories' => [
+                    'Salario', 'Rentabilidad', 'Préstamos', 'Extras'
+                ]
+            ]
         ];
 
         foreach ($categories as $key => $category) {
-            Category::create($category);
+            $subCategories = $category['subCategories'];
+            unset($category['subCategories']);
+
+            $categoryCreate = Category::create($category);
+
+            foreach ($subCategories as $key => $subCategory) {
+                $categoryCreate->subCategories()->saveMany([
+                    new SubCategory(['name' => $subCategory])
+                ]);
+            }
         }
     }
 }

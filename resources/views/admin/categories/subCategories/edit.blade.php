@@ -4,7 +4,8 @@
             <div class="col-md-12 grid-margin">
                 <div class="row">
                     <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                        <h3 class="font-weight-bold">Categorias</h3>
+                        <h3 class="font-weight-bold"><b>Categoría:</b> {{ $category->name }}</h3>
+                        <small>Sub Categorias</small>
                     </div>
                 </div>
             </div>
@@ -15,17 +16,18 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <b>Crear categoría</b>
+                        <b>Editar Sub categoría</b>
                     </div>
-                    <form action="{{ route('admin.categories.store') }}" method="post">
+                    <form action="{{ route('admin.categories.subCategories.update', [$category->id, $subCategory->id]) }}" method="post">
                         @csrf
+                        @method('PUT')
                         <div class="row">
                             <div class="col-md-12">
-                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ old('name') }}" />
+                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ $subCategory->name }}" />
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-sm">Guardar</button>
-                        <a href="{{ route('admin.categories.index') }}" class="btn btn-dark btn-sm">Regresar</a>
+                        <button type="submit" class="btn btn-success btn-sm">Actualizar</button>
+                        <a href="{{ route('admin.categories.subCategories.index', $category->id) }}" class="btn btn-dark btn-sm">Regresar</a>
                     </form>
                 </div>
             </div>
