@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 
 use App\Http\Controllers\ProfileUserController;
+use App\Http\Controllers\MovementController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function() {
 
     // Rutas de perfil de usuario
     Route::resource('profile', ProfileUserController::class)->except(['index', 'store', 'create', 'edit', 'destroy']);
+    Route::resource('movements', MovementController::class);
 });
 
 // Rutas para autenticacion con Github, google, facebook, etc

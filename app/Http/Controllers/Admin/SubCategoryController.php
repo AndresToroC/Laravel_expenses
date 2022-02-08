@@ -10,6 +10,10 @@ use App\Models\SubCategory;
 
 class SubCategoryController extends Controller
 {
+    function __construct() {
+        $this->middleware(['role:admin']);
+    }
+    
     public function index(Request $request, Category $category)
     {
         $searchSubCategory = ($request->searchSubCategory) ? $request->searchSubCategory : '';

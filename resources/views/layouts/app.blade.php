@@ -44,7 +44,9 @@
                             </div>
                         @endisset
                         
-                        {{ $header }}
+                        @isset($header)
+                            {{ $header }}
+                        @endisset
 
                         @if (Session::has('message'))
                             <div class="row">
