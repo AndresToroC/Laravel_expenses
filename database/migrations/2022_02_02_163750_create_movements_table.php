@@ -18,8 +18,9 @@ class CreateMovementsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('sub_category_id')->constrained('sub_categories');
             $table->string('description');
-            $table->float('value', 8, 2);
+            $table->float('value', 20, 2);
             $table->date('date');
+            $table->time('hour')->nullable();
             $table->timestamps();
         });
     }

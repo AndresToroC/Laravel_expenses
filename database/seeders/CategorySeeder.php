@@ -12,13 +12,13 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $categories = [
-            ['name' => 'Gastos', 
+            ['name' => 'Gastos', 'color' => 'danger', 'icon' => '-',
                 'subCategories' => [
                     'Compromisos Bancarios', 'Salud y bienestar', 'Transporte', 'Hogar', 'Tecnología',
                     'Entretenimiento', 'Moda', 'Alimentación', 'Educación', 'Viajes', 'Otros'
                 ]
             ],
-            ['name' => 'Ingresos', 
+            ['name' => 'Ingresos', 'color' => 'success', 'icon' => '+',
                 'subCategories' => [
                     'Salario', 'Rentabilidad', 'Préstamos', 'Extras'
                 ]

@@ -8,7 +8,7 @@
                     </div>
                     <div class="col-12 col-xl-4">
                         <div class="justify-content-end d-flex">
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalSalary">
+                            <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#modalSalary">
                                 Actualizar sueldo
                             </button>
                         </div>
@@ -22,16 +22,92 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <b>Movimientos</b>
+                        <b>Buscar Movimientos</b>
                     </div>
-                    <form action="" method="get">
-                        <x-form.input type="month" name="searchNameOrEmail" placeholder="Buscar por nombre o correo" value="" />
+                    <form action="{{ route('movements.index') }}" method="get">
+                        <x-form.input type="month" name="date" value="{{ $date }}" />
                         <button type="submit" class="btn btn-success btn-sm">Buscar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @if ($date)
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <div class="row">
+                                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                                    <b>Movimientos</b>
+                                </div>
+                                <div class="col-12 col-xl-4">
+                                    <div class="justify-content-end d-flex">
+                                        <a href="{{ route('movements.create', ['date' => $date]) }}" class="btn btn-success btn-sm">
+                                            Agregar movimiento
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Valor</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Fecha</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($movements as $movement)
+                                    <tr>
+                                        <td>
+                                            <b class="text-{{ $movement->sub_category->categories->color }}">
+                                                {{ $movement->sub_category->categories->icon }} 
+                                                $ {{ number_format($movement->value) }}
+                                            </b>
+                                        </td>
+                                        <td>{{ $movement->description }}</td>
+                                        <td>
+                                            {{ $movement->sub_category->categories->name }}
+                                            <br>
+                                            <small><b>Sub-categoría: </b>{{ $movement->sub_category->name }}</small>
+                                        </td>
+                                        <td>
+                                            {{ $movement->date }}
+                                            <br>
+                                            <small>{{ $movement->hour }}</small>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{{ route('movements.edit', ['movement' => $movement->id, 'date' => $date]) }}" class="btn btn-primary btn-sm">
+                                                Editar
+                                            </a>
+                                            <a onclick="deleteMovement({{ $movement->id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                                            <form action="{{ route('movements.destroy', $movement->id) }}" id="delete-movement-{{ $movement->id }}" method="post" style="display: none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">No se encontraron registros</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        <div class="mt-2">
+                            {{ $movements->appends(['date' => $date])->render() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- Modal --}}
     <div class="modal fade" id="modalSalary" tabindex="-1" role="dialog" aria-labelledby="modalSalaryLabel" aria-hidden="true">
@@ -77,6 +153,23 @@
                     }
                 })
             });
+
+            // Eliminar movimiento
+            function deleteMovement(movementId) {
+                Swal.fire({
+                    title: '¿Estas seguro que deseas eliminar este registro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("delete-movement-"+movementId).submit();
+                    }
+                })
+            }
         </script>
     </x-slot>
 </x-app-layout>

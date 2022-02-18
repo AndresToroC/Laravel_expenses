@@ -1,7 +1,14 @@
-@props(['type', 'name', 'id' => '', 'placeholder' => '', 'value' => '', 'details' => ''])
+@props(['type', 'name', 'id' => '', 'placeholder' => '', 'value' => '', 'details' => '', 'disabled' => ''])
 
 <div class="form-group">
-    <input type="{{ $type }}" class="form-control form-control-sm" name="{{ $name }}" id="{{ $id !== '' ? $id : $name }}" placeholder="{{ $placeholder }}" value="{{ $value }}">
+    <input type="{{ $type }}" 
+        id="{{ $id !== '' ? $id : $name }}" 
+        name="{{ $name }}" 
+        class="form-control form-control-sm"
+        placeholder="{{ $placeholder }}" 
+        value="{{ $value }}"
+        {{ $disabled == 'disabled' ? $disabled : '' }}
+        />
     @if ($details)
         <div class="mb-1">
             <small class="text-gray">{{ $details }}</small>

@@ -3,7 +3,7 @@
 <div class="form-group">
     <select name="{{ $name }}" id="{{ $id !== '' ? $id : $name }}" class="form-control form-control-sm">
         @if ($placeholder)
-            <option value="" selected>{{ $placeholder }}</option>
+            <option disabled selected>{{ $placeholder }}</option>
         @endif
         @foreach ($options as $option)
             <option value="{{ $option['value'] }}" @if ($value == $option['value']) selected @endif>

@@ -56,7 +56,6 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-sm">Actualizar</button>
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-dark btn-sm">Regresar</a>
                     </form>
                 </div>
             </div>

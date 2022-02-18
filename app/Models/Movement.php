@@ -10,6 +10,10 @@ class Movement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'sub_category_id', 'description', 'value', 'date'
+        'user_id', 'sub_category_id', 'description', 'value', 'date', 'hour'
     ];
+
+    public function sub_category() {
+        return $this->belongsTo(SubCategory::class);
+    }
 }
