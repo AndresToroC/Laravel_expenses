@@ -51,7 +51,7 @@
                                         <a href="{{ route('movements.create', ['date' => $date]) }}" class="btn btn-success btn-sm mr-2">
                                             Agregar movimiento
                                         </a>
-                                        <a href="" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('movement.download', ['date' => $date]) }}" class="btn btn-warning btn-sm">
                                             Excel
                                         </a>
                                     </div>

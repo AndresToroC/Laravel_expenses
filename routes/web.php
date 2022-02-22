@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function() {
     // Rutas de perfil de usuario
     Route::resource('profile', ProfileUserController::class)->except(['index', 'store', 'create', 'edit', 'destroy']);
     Route::resource('movements', MovementController::class);
+    Route::get('movementDownload', [MovementController::class, 'downloadFile'])->name('movement.download');
 });
 
 // Rutas para autenticacion con Github, google, facebook, etc

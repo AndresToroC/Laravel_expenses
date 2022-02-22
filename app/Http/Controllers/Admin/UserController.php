@@ -14,7 +14,6 @@ use App\Helper\UiAvatar;
 use App\Models\User;
 
 use App\Exports\SheetExport;
-use App\Exports\UserExport;
 
 class UserController extends Controller
 {
