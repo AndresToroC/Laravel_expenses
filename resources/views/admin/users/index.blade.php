@@ -36,7 +36,7 @@
                                     <x-form.select name="searchRole" placeholder="Buscar por rol" :options="$roles" value="{{ $searchRole }}" />
                                 </div>
                                 <div class="col-md-3">
-                                    <x-form.select name="searchStatusUser" placeholder="Activos" :options="$searchStatusOptions" value="{{ $searchStatus }}" />
+                                    <x-form.select name="searchStatusUser" :options="$searchStatusOptions" value="{{ $searchStatus }}" />
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <button type="submit" class="btn btn-success">Buscar</button>
@@ -72,15 +72,15 @@
                                             <img src="{{ asset('storage/'.$user->photo) }}" alt="">
                                         </td>
                                         <td class="text-right">
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm">
-                                                Editar
-                                            </a>
                                             @if ($user->deleted_at)
                                                 <a onclick="restoreUser({{ $user->id }}, '{{ $user->deleted_at }}')" class="btn btn-success btn-sm">Activar</a>
                                                 <form action="{{ route('admin.users.restore', $user->id) }}" method="post" id="restore-user-{{ $user->id }}" style="display: none">
                                                     @csrf
                                                 </form>
                                             @else
+                                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm">
+                                                    Editar
+                                                </a>
                                                 <a onclick="deleteUser({{ $user->id }}, '{{ $user->deleted_at }}')" class="btn btn-danger btn-sm">Eliminar</a>
                                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="post" id="delete-user-{{ $user->id }}" style="display: none">
                                                     @csrf

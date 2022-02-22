@@ -24,7 +24,15 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ old('name') }}" />
+                                <x-form.input type="text" name="name" placeholder="Nombre" value="{{ old('name') }}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-form.input type="text" name="color" placeholder="Color" value="{{ old('color') }}" />
+                            </div>
+                            <div class="col-md-6">
+                                <x-form.input type="text" name="icon" placeholder="Icono" value="{{ old('icon') }}" />
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-sm">Guardar</button>

@@ -25,7 +25,15 @@
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-12">
-                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ $category->name }}" />
+                                <x-form.input type="text" name="name" placeholder="Nombre" value="{{ $category->name }}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-form.input type="text" name="color" placeholder="Color" value="{{ $category->color }}" />
+                            </div>
+                            <div class="col-md-6">
+                                <x-form.input type="text" name="icon" placeholder="Icono" value="{{ $category->icon }}" />
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-sm">Actualizar</button>

@@ -12,7 +12,7 @@ class MovementController extends Controller
     public function index(Request $request)
     {
         $date = $request->date ? $request->date : '';
-
+        
         $user = Auth::user();
         $movements = [];
 
@@ -57,14 +57,29 @@ class MovementController extends Controller
         //
     }
 
-    public function edit(Movement $movement)
+    public function edit(Request $request, Movement $movement)
     {
-        //
+        $date = $request->date ? $request->date : '';
+        $movement->load('sub_category');
+
+        return view('movements.edit', compact('movement', 'date'));
     }
 
     public function update(Request $request, Movement $movement)
     {
-        //
+        $request->validate([
+            'category_id' => 'required',
+            'sub_category_id' => 'required',
+            'description' => 'required|max:255',
+            'value' => 'required',
+            'date' => 'required'
+        ]);
+
+        unset($request['category_id']);
+
+        $movement->update($request->all());
+
+        return redirect()->back()->with(['message' => 'Movimiento actualizado correctamente']);
     }
 
     public function destroy(Movement $movement)

@@ -48,3 +48,18 @@ Breadcrumbs::for('categories.subCategories.edit', function (BreadcrumbTrail $tra
     $trail->parent('categories.subCategories', $category);
     $trail->push('Editar Sub-Categoría', route('admin.categories.subCategories.edit', [$category, $subCategory]));
 });
+
+// Movimientos
+Breadcrumbs::for('movements', function (BreadcrumbTrail $trail, $date = '') {
+    $trail->push('Movimientos', route('movements.index', $date));
+});
+
+Breadcrumbs::for('movements.create', function (BreadcrumbTrail $trail, $date = '') {
+    $trail->parent('movements', ['date' => $date]);
+    $trail->push('Crear Movimiento', route('movements.create', $date));
+});
+
+Breadcrumbs::for('movements.edit', function (BreadcrumbTrail $trail, $date = '', $movement) {
+    $trail->parent('movements', ['date' => $date]);
+    $trail->push('Editar Movimiento', route('movements.edit', [$date, $movement]));
+});

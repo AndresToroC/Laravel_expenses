@@ -24,7 +24,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
-                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ old('name') }}" />
+                                <x-form.input type="text" name="name" placeholder="Nombre" value="{{ old('name') }}" />
                             </div>
                             <div class="col-md-6">
                                 <x-form.input type="email" name="email" placeholder="Correo electronico" value="{{ old('email') }}" />

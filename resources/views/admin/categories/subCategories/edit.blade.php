@@ -26,7 +26,7 @@
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-12">
-                                <x-form.input type="name" name="name" placeholder="Nombre" value="{{ $subCategory->name }}" />
+                                <x-form.input type="text" name="name" placeholder="Nombre" value="{{ $subCategory->name }}" />
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-sm">Actualizar</button>

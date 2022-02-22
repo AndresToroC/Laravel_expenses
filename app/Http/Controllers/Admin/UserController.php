@@ -43,7 +43,7 @@ class UserController extends Controller
             })->paginate(10);
             
         $roles = Role::select('id AS value', 'name')->get();
-        $searchStatusOptions = collect([['value' => 1, 'name' => 'Eliminados']]);
+        $searchStatusOptions = collect([['value' => '', 'name' => 'Activos'], ['value' => 1, 'name' => 'Eliminados']]);
 
         return view('admin.users.index', compact('users', 'roles', 'searchNameOrEmail', 'searchRole', 'searchStatus', 'searchStatusOptions'));
     }

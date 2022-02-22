@@ -1,4 +1,7 @@
 <x-app-layout>
+    <x-slot name="breadcumps">
+        {{ Breadcrumbs::render('movements', $date) }}
+    </x-slot>
     <x-slot name="header">
         <div class="row">
             <div class="col-md-12 grid-margin">
@@ -45,61 +48,66 @@
                                 </div>
                                 <div class="col-12 col-xl-4">
                                     <div class="justify-content-end d-flex">
-                                        <a href="{{ route('movements.create', ['date' => $date]) }}" class="btn btn-success btn-sm">
+                                        <a href="{{ route('movements.create', ['date' => $date]) }}" class="btn btn-success btn-sm mr-2">
                                             Agregar movimiento
+                                        </a>
+                                        <a href="" class="btn btn-warning btn-sm">
+                                            Excel
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Valor</th>
-                                    <th>Descripción</th>
-                                    <th>Categoría</th>
-                                    <th>Fecha</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($movements as $movement)
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <b class="text-{{ $movement->sub_category->categories->color }}">
-                                                {{ $movement->sub_category->categories->icon }} 
-                                                $ {{ number_format($movement->value) }}
-                                            </b>
-                                        </td>
-                                        <td>{{ $movement->description }}</td>
-                                        <td>
-                                            {{ $movement->sub_category->categories->name }}
-                                            <br>
-                                            <small><b>Sub-categoría: </b>{{ $movement->sub_category->name }}</small>
-                                        </td>
-                                        <td>
-                                            {{ $movement->date }}
-                                            <br>
-                                            <small>{{ $movement->hour }}</small>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="{{ route('movements.edit', ['movement' => $movement->id, 'date' => $date]) }}" class="btn btn-primary btn-sm">
-                                                Editar
-                                            </a>
-                                            <a onclick="deleteMovement({{ $movement->id }})" class="btn btn-danger btn-sm">Eliminar</a>
-                                            <form action="{{ route('movements.destroy', $movement->id) }}" id="delete-movement-{{ $movement->id }}" method="post" style="display: none">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        </td>
+                                        <th>Valor</th>
+                                        <th>Descripción</th>
+                                        <th>Categoría</th>
+                                        <th>Fecha</th>
+                                        <th></th>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5">No se encontraron registros</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse ($movements as $movement)
+                                        <tr>
+                                            <td>
+                                                <b class="text-{{ $movement->sub_category->categories->color }}">
+                                                    {{ $movement->sub_category->categories->icon }} 
+                                                    $ {{ number_format($movement->value) }}
+                                                </b>
+                                            </td>
+                                            <td>{{ substr($movement->description, 0, 40) }}{{ (strlen($movement->description) > 40) ? ' ...' : '' }}</td>
+                                            <td>
+                                                {{ $movement->sub_category->categories->name }}
+                                                <br>
+                                                <small><b>Sub-categoría: </b>{{ $movement->sub_category->name }}</small>
+                                            </td>
+                                            <td>
+                                                {{ $movement->date }}
+                                                <br>
+                                                <small>{{ $movement->hour }}</small>
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="{{ route('movements.edit', ['movement' => $movement->id, 'date' => $date]) }}" class="btn btn-primary btn-sm">
+                                                    Editar
+                                                </a>
+                                                <a onclick="deleteMovement({{ $movement->id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                                                <form action="{{ route('movements.destroy', $movement->id) }}" id="delete-movement-{{ $movement->id }}" method="post" style="display: none">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5">No se encontraron registros</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="mt-2">
                             {{ $movements->appends(['date' => $date])->render() }}
                         </div>
