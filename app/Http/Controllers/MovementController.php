@@ -21,7 +21,10 @@ class MovementController extends Controller
 
         if ($date) {
             $movements = Movement::with('sub_category.categories')
-                ->whereUserId($user->id)->where('date', 'LIKE', $date.'%')->paginate(10);
+                ->whereUserId($user->id)->where('date', 'LIKE', $date.'%')
+                ->orderBy('date', 'ASC')
+                ->orderBy('Hour', 'ASC')
+                ->paginate(10);
         }
 
         return view('movements.index', compact('user', 'movements', 'date'));
@@ -102,7 +105,10 @@ class MovementController extends Controller
         $user = Auth::user();
 
         $movements = Movement::with('sub_category.categories')
-            ->whereUserId($user->id)->where('date', 'LIKE', $date.'%')->get();
+            ->whereUserId($user->id)->where('date', 'LIKE', $date.'%')
+            ->orderBy('date', 'ASC')
+            ->orderBy('Hour', 'ASC')
+            ->get();
 
         if (count($movements)) {
             $data = [];
