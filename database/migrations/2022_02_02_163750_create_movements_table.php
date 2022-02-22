@@ -16,7 +16,7 @@ class CreateMovementsTable extends Migration
         Schema::create('movements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('sub_category_id')->constrained('sub_categories');
+            $table->foreignId('sub_category_id')->constrained('sub_categories')->onDelete('restrict');
             $table->string('description');
             $table->float('value', 20, 2);
             $table->date('date');

@@ -67,8 +67,16 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        $message = '';
 
-        return redirect()->back()->with('message', 'Categoría eliminada correctamente');
+        try {
+            $category->delete();
+
+            $message = 'Categoría eliminada correctamente';
+        } catch (\Throwable $th) {
+            $message = 'No se puede eliminar esta categoría ya que otros registros dependen de ella';
+        }
+
+        return redirect()->back()->with('message', $message);
     }
 }

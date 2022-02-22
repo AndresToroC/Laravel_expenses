@@ -68,8 +68,16 @@ class SubCategoryController extends Controller
 
     public function destroy(Category $category, SubCategory $subCategory)
     {
-        $subCategory->delete();
+        $message = '';
+        
+        try {
+            $subCategory->delete();
+            
+            $message = 'Sub categoría eliminada correctamente';
+        } catch (\Throwable $th) {
+            $message = 'No se puede eliminar esta sub categoría ya que otros registros dependen de ella';
+        }
 
-        return redirect()->back()->with('message', 'Sub categoría eliminada correctamente');
+        return redirect()->back()->with('message', $message);
     }
 }
