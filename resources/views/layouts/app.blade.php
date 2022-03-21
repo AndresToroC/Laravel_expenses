@@ -77,6 +77,8 @@
 
         <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
         @isset($scripts)
             {{ $scripts }}
         @endisset

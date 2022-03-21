@@ -9,14 +9,11 @@ use App\Http\Controllers\Admin\SubCategoryController;
 
 use App\Http\Controllers\ProfileUserController;
 use App\Http\Controllers\MovementController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('auth.login');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
 
@@ -27,6 +24,10 @@ Route::get('/logout', function() {
 })->name('logout');
 
 Route::middleware('auth')->group(function() {
+    // Dashboard
+    Route::get('dashboard/general', [DashboardController::class, 'general'])->name('dashboard.general');
+    Route::get('dashboard', [DashboardController::class, 'personal'])->name('dashboard');
+
     // Rutas de administrador
     Route::name('admin.')->prefix('admin')->group(function() {
         Route::resource('users', UserController::class);
