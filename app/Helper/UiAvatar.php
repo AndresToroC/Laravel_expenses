@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class UiAvatar {
-    public function avatar($name) {
+    public static function avatar($name) {
         $response = Http::get('https://ui-avatars.com/api/?background=random&format=png&name='.$name);
 
         $img = $response->body();
